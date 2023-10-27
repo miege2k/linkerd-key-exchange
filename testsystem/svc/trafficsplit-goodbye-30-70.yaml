@@ -1,0 +1,12 @@
+apiVersion: split.smi-spec.io/v1alpha1
+kind: TrafficSplit
+metadata:
+  name: goodbyeworld-split
+  namespace: default
+spec:
+  service: goodbyeworld
+  backends:
+  - service: goodbyeworld
+    weight: 30
+  - service: goodbyeworld2
+    weight: 70

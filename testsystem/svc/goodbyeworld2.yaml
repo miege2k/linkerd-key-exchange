@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: goodbyeworld    
+    version: "2.0"
+  name: goodbyeworld2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: goodbyeworld
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: goodbyeworld
+        version: "2.0"
+    spec:
+      containers:
+      - name: goodbyeworld2
+        image: microservice-linkerd-goodbyeworld:2
+        imagePullPolicy: Never        
+        ports:
+        - containerPort: 8080
+        resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: goodbyeworld
+    version: "2.0"
+  name: goodbyeworld2
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+    name: http    
+  selector:
+    app: goodbyeworld
+    version: "2.0"
+  type: NodePort
+status:
+  loadBalancer: {}
+
+---
+
+#apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: goodbyeworld
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
+    ingress.kubernetes.io/custom-request-headers: l5d-dst-override:goodbyeworld.default.svc.cluster.local:80
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /goodbyeworld2
+        pathType: Exact
+        backend:
+          service:
+            name: goodbyeworld
+            port:
+              number: 80
