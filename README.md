@@ -1,4 +1,4 @@
-# Projekt
+# Project
 
 Demonstration of an example application with Service Mesh (Linkerd).
 This sample application is based on the [Repository](https://github.com/kiliandangendorf/hsh-favs-linkerd-prototype).
@@ -24,7 +24,7 @@ The following tools are installed:
 - traefik
 - step
 
-# Zertifikate erstellen
+# Create certifikates
 
 "init-first-certs.sh" creates the first generation certificates.
 "init-second-certs.sh" creates the second generation certificates and the bundle in which both certificates are stored.
